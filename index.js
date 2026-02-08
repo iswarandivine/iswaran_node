@@ -49,9 +49,9 @@ app.post('/api/pay', async (req, res) => {
         merchantTransactionId: transactionId,
         merchantUserId: "MUID123", // Aligned with working QA script
         amount: amount * 100, // Amount in paise
-        redirectUrl: `http://localhost:4000/api/payment-redirect?type=${type}`, // Pass type in redirect URL
+        redirectUrl: `${process.env.BACKEND_URL}/api/payment-redirect?type=${type}`, // Pass type in redirect URL
         redirectMode: "POST",
-        callbackUrl: "http://localhost:4000/api/callback",
+        callbackUrl: `${process.env.BACKEND_URL}/api/callback`,
         mobileNumber: "9999999999",
         paymentInstrument: {
             type: "PAY_PAGE"
@@ -140,9 +140,9 @@ app.post('/api/payment-redirect', (req, res) => {
             transactionStore.delete(merchantTransactionId);
         }
 
-        res.redirect(`http://localhost:3000/payment-status?success=true&type=${type}`);
+        res.redirect(`${process.env.FRONTEND_URL}/payment-status?success=true&type=${type}`);
     } else {
-        res.redirect(`http://localhost:3000/payment-status?success=false&type=${type}`);
+        res.redirect(`${process.env.FRONTEND_URL}/payment-status?success=false&type=${type}`);
     }
 });
 
