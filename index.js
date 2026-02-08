@@ -16,6 +16,8 @@ const MERCHANT_ID = process.env.PHONEPE_MERCHANT_ID;
 const SALT_KEY = process.env.PHONEPE_SALT_KEY;
 const SALT_INDEX = process.env.PHONEPE_SALT_INDEX;
 const PORT = process.env.PORT || 4000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
 
 // Email Configuration
 const transporter = nodemailer.createTransport({
@@ -49,9 +51,9 @@ app.post('/api/pay', async (req, res) => {
         merchantTransactionId: transactionId,
         merchantUserId: "MUID123", // Aligned with working QA script
         amount: amount * 100, // Amount in paise
-        redirectUrl: `${process.env.BACKEND_URL}/api/payment-redirect?type=${type}`, // Pass type in redirect URL
+        redirectUrl: `${BACKEND_URL}/api/payment-redirect?type=${type}`, // Pass type in redirect URL
         redirectMode: "POST",
-        callbackUrl: `${process.env.BACKEND_URL}/api/callback`,
+        callbackUrl: `${BACKEND_URL}/api/callback`,
         mobileNumber: "9999999999",
         paymentInstrument: {
             type: "PAY_PAGE"
@@ -140,9 +142,9 @@ app.post('/api/payment-redirect', (req, res) => {
             transactionStore.delete(merchantTransactionId);
         }
 
-        res.redirect(`${process.env.FRONTEND_URL}/payment-status?success=true&type=${type}`);
+        res.redirect(`${FRONTEND_URL}/payment-status?success=true&type=${type}`);
     } else {
-        res.redirect(`${process.env.FRONTEND_URL}/payment-status?success=false&type=${type}`);
+        res.redirect(`${FRONTEND_URL}/payment-status?success=false&type=${type}`);
     }
 });
 
